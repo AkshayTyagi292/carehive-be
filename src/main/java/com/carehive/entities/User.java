@@ -45,7 +45,17 @@ public class User {
 	 @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name="date", columnDefinition = "DATE")
 	private LocalDate date;
+	 
+	 @Column(name="password")
+	 private String password;
+	 
 	
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
 	public int getId() {
 		return id;
 	}
@@ -90,7 +100,8 @@ public class User {
 		this.userType = userType;
 	}
 	
-	public User( UserType userType, String name, String email, String contact, String gender, LocalDate date) {
+	public User(UserType userType, String name, String email, String contact, String gender, LocalDate date,
+			String password) {
 		super();
 		this.userType = userType;
 		this.name = name;
@@ -98,6 +109,7 @@ public class User {
 		this.contact = contact;
 		this.gender = gender;
 		this.date = date;
+		this.password = password;
 	}
 	public User() {
 		super();
