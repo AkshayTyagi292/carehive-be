@@ -114,10 +114,10 @@ public class User {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public User(int id, UserType userType, String name, String email, String contact, String emergencyContact,
+	public User( UserType userType, String name, String email, String contact, String emergencyContact,
 			String gender, LocalDate date, String password) {
 		super();
-		this.id = id;
+	
 		this.userType = userType;
 		this.name = name;
 		this.email = email;
