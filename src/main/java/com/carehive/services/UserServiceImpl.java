@@ -25,7 +25,14 @@ public class UserServiceImpl implements UserService {
 		  if (user.getDate().plusYears(18).isAfter(LocalDate.now())) {
 		        throw new RuntimeException("User must be at least 18 years old.");
 		    }
+		  
+		  
+		  
 		User savedUser=userRepository.save(user); 
+		
+		
+		
+		
 		 return userRepository.findById(savedUser.getId())
 	                .orElseThrow(() -> new RuntimeException("User not found after saving."));
 	    }

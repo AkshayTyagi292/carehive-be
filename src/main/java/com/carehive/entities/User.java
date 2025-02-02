@@ -50,6 +50,7 @@ public class User {
 	@Column(name="gender")
 	private String gender;
 	
+	
 
 	 @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name="date", columnDefinition = "DATE")
