@@ -1,8 +1,8 @@
 package com.carehive.entities;
 
 import java.time.LocalDate;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
+import java.time.LocalDateTime;
+import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -15,110 +15,143 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="user")
+@Table(name = "user")
 public class User {
-	
+
 	@Id
-	@GeneratedValue(generator="increment")
-	@Column(name="id")
+	@GeneratedValue(generator = "increment")
+	@Column(name = "id")
 	private int id;
-	
-	
-	
-	@Column(name="usertype")
-	@Enumerated(EnumType.STRING)  
+
+	@Column(name = "usertype")
+	@Enumerated(EnumType.STRING)
 	private UserType userType;
-	
-	@Column(name="name")
+
+	@Column(name = "name")
 	private String name;
-	
-	@Column(name="email")
+
+	@Column(name = "email")
 	private String email;
-	
-	@Column(name="contact")
+
+	@Column(name = "contact")
 	private String contact;
-	
-	@Column(name="emergencycontact")
+
+	@Column(name = "emergencycontact")
 	private String emergencyContact;
-	
+
 	public String getEmergencyContact() {
 		return emergencyContact;
 	}
+
 	public void setEmergencyContact(String emergencyContact) {
 		this.emergencyContact = emergencyContact;
 	}
-	@Column(name="gender")
-	private String gender;
-	
-	
 
-	 @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    @Column(name="date", columnDefinition = "DATE")
+	@Column(name = "gender")
+	private String gender;
+
+	@Column(name = "resettoken")
+	private String resetToken;
+
+	@Column(name = "resettokenexpiry")
+	private LocalDateTime resetTokenExpiry;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	@Column(name = "date", columnDefinition = "DATE")
 	private LocalDate date;
-	 
-	 @Column(name="password")
-	 private String password;
-	 
-	
+
+	@Column(name = "password")
+	private String password;
+
 	public String getPassword() {
 		return password;
 	}
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
 	public int getId() {
 		return id;
 	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public String getEmail() {
 		return email;
 	}
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
 	public String getContact() {
 		return contact;
 	}
+
 	public void setContact(String contact) {
 		this.contact = contact;
 	}
+
 	public String getGender() {
 		return gender;
 	}
+
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
+
 	public LocalDate getDate() {
 		return date;
 	}
+
 	public void setDate(LocalDate date) {
 		this.date = date;
 	}
-	
+
 	public UserType getUserType() {
 		return userType;
 	}
+
 	public void setUserType(UserType userType) {
 		this.userType = userType;
 	}
-	
-	
+
+	public String getResetToken() {
+		return resetToken;
+	}
+
+	public void setResetToken(String resetToken) {
+		this.resetToken = resetToken;
+	}
+
+	public LocalDateTime getResetTokenExpiry() {
+		return resetTokenExpiry;
+	}
+
+	public void setResetTokenExpiry(LocalDateTime resetTokenExpiry) {
+		this.resetTokenExpiry = resetTokenExpiry;
+	}
+
 	public User() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public User( UserType userType, String name, String email, String contact, String emergencyContact,
-			String gender, LocalDate date, String password) {
+
+	public User(UserType userType, String name, String email, String contact, String emergencyContact, String gender,
+			LocalDate date, String password) {
 		super();
-	
+
 		this.userType = userType;
 		this.name = name;
 		this.email = email;
@@ -128,6 +161,5 @@ public class User {
 		this.date = date;
 		this.password = password;
 	}
-	
 
 }
