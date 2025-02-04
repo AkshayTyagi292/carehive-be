@@ -19,7 +19,7 @@ public class MailServiceImpl implements MailService {
 	        message.setTo(toEmail);
 	        message.setSubject("Password Reset Request");
 	        message.setText("To reset your password, click the following link: \n"
-	                + "http://localhost:8081/user/resetPassword?token=" + token);
+	                + "http://localhost:5173/resetPassword?token=" + token);
 
 	        mailSender.send(message);
 	    }

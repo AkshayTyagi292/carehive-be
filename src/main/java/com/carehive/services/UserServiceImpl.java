@@ -10,11 +10,16 @@ import com.carehive.entities.User;
 import com.carehive.entities.UserType;
 import com.carehive.repositories.UserRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	UserServicesService userServicesService;
 
 	@Override
 	public User register(User user) {
@@ -50,44 +55,71 @@ public class UserServiceImpl implements UserService {
 
 	
 	
+//	@Override
+//	public User updateUser(User user, int id) {
+//		// TODO Auto-generated method stub
+//		
+//		User userToUpdate=userRepository.findById(id).get();
+//		if(userToUpdate==null) {
+//			  throw new RuntimeException("user does not exists");
+//		}
+//			    
+//	     if (user.getUserType() != null) {
+//	            userToUpdate.setUserType(user.getUserType());
+//	        }
+//	        if (user.getName() != null) {
+//	            userToUpdate.setName(user.getName());
+//	        }
+//	        if (user.getEmail() != null) {
+//	            userToUpdate.setEmail(user.getEmail());
+//	        }
+//	        if (user.getContact() != null) {
+//	            userToUpdate.setContact(user.getContact());
+//	        }
+//	        if (user.getEmergencyContact() != null) {
+//	            userToUpdate.setEmergencyContact(user.getEmergencyContact());
+//	        }
+//	        if (user.getGender() != null) {
+//	            userToUpdate.setGender(user.getGender());
+//	        }
+//	        if (user.getDate() != null) {
+//	            userToUpdate.setDate(user.getDate());
+//	        }
+//	        if (user.getPassword() != null ) {
+//	            // Encode the new password before setting it
+//	            userToUpdate.setPassword(user.getPassword());
+//	        }
+//	        
+//	        
+//	        
+//	    
+//	        return userRepository.save(userToUpdate);
+//						  
+//	}	
+	
 	@Override
-	public User updateUser(User user, int id) {
-		// TODO Auto-generated method stub
-		
-		User userToUpdate=userRepository.findById(id).get();
-		if(userToUpdate==null) {
-			  throw new RuntimeException("user does not exists");
-		}
-			    
-	     if (user.getUserType() != null) {
-	            userToUpdate.setUserType(user.getUserType());
-	        }
-	        if (user.getName() != null) {
-	            userToUpdate.setName(user.getName());
-	        }
-	        if (user.getEmail() != null) {
-	            userToUpdate.setEmail(user.getEmail());
-	        }
-	        if (user.getContact() != null) {
-	            userToUpdate.setContact(user.getContact());
-	        }
-	        if (user.getEmergencyContact() != null) {
-	            userToUpdate.setEmergencyContact(user.getEmergencyContact());
-	        }
-	        if (user.getGender() != null) {
-	            userToUpdate.setGender(user.getGender());
-	        }
-	        if (user.getDate() != null) {
-	            userToUpdate.setDate(user.getDate());
-	        }
-	        if (user.getPassword() != null ) {
-	            // Encode the new password before setting it
-	            userToUpdate.setPassword(user.getPassword());
-	        }
-	    
-	        return userRepository.save(userToUpdate);
-						  
-	}	
+	@Transactional
+	public User updateUser(User user, int id, List<Integer> serviceIds) {
+	    User userToUpdate = userRepository.findById(id)
+	            .orElseThrow(() -> new RuntimeException("User does not exist"));
+
+	    if (user.getUserType() != null) userToUpdate.setUserType(user.getUserType());
+	    if (user.getName() != null) userToUpdate.setName(user.getName());
+	    if (user.getEmail() != null) userToUpdate.setEmail(user.getEmail());
+	    if (user.getContact() != null) userToUpdate.setContact(user.getContact());
+	    if (user.getEmergencyContact() != null) userToUpdate.setEmergencyContact(user.getEmergencyContact());
+	    if (user.getGender() != null) userToUpdate.setGender(user.getGender());
+	    if (user.getDate() != null) userToUpdate.setDate(user.getDate());
+	    if (user.getPassword() != null) userToUpdate.setPassword(user.getPassword());
+
+	    // Save updated user details
+	    userRepository.save(userToUpdate);
+
+	    // Update user services
+	    userServicesService.updateUserServices(id, serviceIds);
+
+	    return userToUpdate;
+	}
 	
 	@Override
 	public List<User> getAllCaretakers() {
