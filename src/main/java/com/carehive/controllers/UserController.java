@@ -1,5 +1,7 @@
 package com.carehive.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -33,4 +35,12 @@ public class UserController {
 	public User uodateUserDetails(@RequestBody User user,@PathVariable int id) {
 		   return userService.updateUser(user,id);
 	}
+	
+	@GetMapping("/caretakers")
+	public List<User> getAllCaretakers() {
+		return userService.getAllCaretakers();
+	}
+	
+	
+	
 }

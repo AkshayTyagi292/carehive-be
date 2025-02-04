@@ -1,11 +1,13 @@
 package com.carehive.services;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.carehive.entities.User;
+import com.carehive.entities.UserType;
 import com.carehive.repositories.UserRepository;
 
 @Service
@@ -87,7 +89,31 @@ public class UserServiceImpl implements UserService {
 						  
 	}	
 	
+	@Override
+	public List<User> getAllCaretakers() {
+		// TODO Auto-generated method stub
+		return userRepository.findByUserType(UserType.Caretaker);
+	}
+
 	
+	@Override
+	public User findByEmail(String email) {
+		// TODO Auto-generated method stub
+		return userRepository.findByEmail(email.trim());
+	}
+
+
+
+	@Override
+	public User findByResetToken(String token) {
+		// TODO Auto-generated method stub
+		return userRepository.findByResetToken(token);
+	}
+
+
+
+
+
 	
 	
 	}

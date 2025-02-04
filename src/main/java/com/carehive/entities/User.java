@@ -1,10 +1,11 @@
 package com.carehive.entities;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -41,9 +42,16 @@ public class User {
 	@Column(name="emergencycontact")
 	private String emergencyContact;
 	
+	@Column(name = "resettoken")
+	private String resetToken;
+
+	@Column(name = "resettokenexpiry")
+	private LocalDateTime resetTokenExpiry;
+	
 	public String getEmergencyContact() {
 		return emergencyContact;
 	}
+	
 	public void setEmergencyContact(String emergencyContact) {
 		this.emergencyContact = emergencyContact;
 	}
@@ -108,6 +116,22 @@ public class User {
 	}
 	public void setUserType(UserType userType) {
 		this.userType = userType;
+	}
+	
+	public String getResetToken() {
+		return resetToken;
+	}
+
+	public void setResetToken(String resetToken) {
+		this.resetToken = resetToken;
+	}
+
+	public LocalDateTime getResetTokenExpiry() {
+		return resetTokenExpiry;
+	}
+
+	public void setResetTokenExpiry(LocalDateTime resetTokenExpiry) {
+		this.resetTokenExpiry = resetTokenExpiry;
 	}
 	
 	
