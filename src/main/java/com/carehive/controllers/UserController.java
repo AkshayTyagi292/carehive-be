@@ -32,6 +32,8 @@ public class UserController {
 		  return userService.getDetails(id);
 	}
 	
+	
+	
 //	@PatchMapping("/updateUserDetails/{id}")
 //	public User uodateUserDetails(@RequestBody User user,@PathVariable int id) {
 //		   return userService.updateUser(user,id);
