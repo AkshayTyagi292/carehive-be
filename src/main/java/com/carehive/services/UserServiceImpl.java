@@ -2,13 +2,17 @@ package com.carehive.services;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.carehive.entities.User;
 import com.carehive.entities.UserType;
+import com.carehive.entities.UserUpdateRequest;
+import com.carehive.entities.UsersServices;
 import com.carehive.repositories.UserRepository;
+import com.carehive.repositories.UserServicesRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -20,6 +24,9 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	UserServicesService userServicesService;
+	
+	@Autowired
+	UserServicesRepository userServicesRepository;
 
 	@Override
 	public User register(User user) {
@@ -47,10 +54,32 @@ public class UserServiceImpl implements UserService {
 	
 
 	@Override
-	public User getDetails(int id) {
-		// TODO Auto-generated method stub		
-		 return userRepository.findById(id)
-	                .orElseThrow(() -> new RuntimeException("User not exists"));
+	public UserUpdateRequest getDetails(int id) {
+	
+		 User user = userRepository.findById(id)
+		            .orElseThrow(() -> new RuntimeException("User does not exist"));
+
+		    // Fetch list of serviceIds from user_services table
+		    List<Integer> serviceIds = userServicesRepository.findByUserId(id)
+		            .stream()
+		            .map(UsersServices::getServiceId)
+		            .collect(Collectors.toList());
+
+		    // Construct response DTO
+		    UserUpdateRequest response = new UserUpdateRequest();
+		    response.setUserType(user.getUserType());
+		    response.setName(user.getName());
+		    response.setEmail(user.getEmail());
+		    response.setContact(user.getContact());
+		    response.setEmergencyContact(user.getEmergencyContact());
+		    response.setGender(user.getGender());
+		    response.setDate(user.getDate());
+		    response.setPassword(user.getPassword());
+		    response.setServiceIds(serviceIds); // Add service IDs
+
+		    return response;
+		
+		
 	}
 
 	
