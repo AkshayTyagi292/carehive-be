@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.carehive.entities.BookingStatus;
 import com.carehive.entities.Bookings;
 import com.carehive.entities.UserType;
 import com.carehive.repositories.BookingRepository;
@@ -44,6 +45,31 @@ public class BookingServiceImpl implements BookingService {
 			return bookingRepository.findAllByelderId(id);
 		}
 		return booking;
+	}
+
+	@Override
+	public Bookings updateBookingStatus(int id, BookingStatus status) {
+		// TODO Auto-generated method stub		
+		Bookings booking =bookingRepository.findBybookingId(id);
+		if(booking==null) {
+			throw new RuntimeException("booking not found!");
+		}
+		booking.setStatus(status);
+		booking.setMessage("booking status updated sucessfully");
+		return bookingRepository.save(booking);
+	}
+
+	@Override
+	public Bookings getBookingDetails(int bookingId) {
+		// TODO Auto-generated method stub
+		Bookings booking =bookingRepository.findBybookingId(bookingId);
+		if(booking ==null) {
+			throw new RuntimeException("booking not found !");
+			
+		}
+		booking.setMessage("booking details fetched sucessfully |");	
+		return booking;
+		
 	}
 	
 	

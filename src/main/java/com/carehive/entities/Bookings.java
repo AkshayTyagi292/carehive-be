@@ -26,8 +26,11 @@ public class Bookings {
 
 	    @Column(name = "caretakerid", nullable = false)
 	    private int caretakerId;
+	    
+	    @Column(name="serviceid",nullable=false)
+	    private int serviceId;
 
-	    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
+	    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 	    @Column(name = "datetime", nullable = false)
 	    private LocalDateTime datetime;
 
@@ -62,6 +65,16 @@ public class Bookings {
 
 		public void setElderId(int elderId) {
 			this.elderId = elderId;
+		}
+		
+		
+
+		public int getServiceId() {
+			return serviceId;
+		}
+
+		public void setServiceId(int serviceId) {
+			this.serviceId = serviceId;
 		}
 
 		public int getCaretakerId() {
@@ -125,11 +138,12 @@ public class Bookings {
 			// TODO Auto-generated constructor stub
 		}
 
-		public Bookings(int elderId, int caretakerId, LocalDateTime datetime, int bookingHrs, double price,
+		public Bookings(int elderId, int caretakerId,int serviceId, LocalDateTime datetime, int bookingHrs, double price,
 				double totalprice, BookingStatus status, String message) {
 			super();
 			this.elderId = elderId;
 			this.caretakerId = caretakerId;
+			this.serviceId=serviceId;
 			this.datetime = datetime;
 			this.bookingHrs = bookingHrs;
 			this.price = price;
