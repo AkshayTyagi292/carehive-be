@@ -2,6 +2,7 @@
 <section name="Workbench">
 	<section name="MavenProjectImportWizardPage">
 		<list key="rootDirectory">
+			<item value="/Users/sakshamsingla/Desktop/CareHive/carehive-be"/>
 			<item value="E:\carehive"/>
 			<item value="E:"/>
 		</list>

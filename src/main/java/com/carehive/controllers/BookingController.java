@@ -3,6 +3,7 @@ package com.carehive.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +38,7 @@ public class BookingController {
 	}
 	
 	@PatchMapping("/{id}/{status}")
+	@PreAuthorize("hasAuthority('CAREGIVER') or hasAuthority('ADMIN')")
 	public Bookings updateBookingStatus(@PathVariable int id, @PathVariable BookingStatus status) {
 		 return bookingService.updateBookingStatus(id,status);
 	}
@@ -46,5 +48,15 @@ public class BookingController {
 		return bookingService.getBookingDetails(bookingId);
 	}
 	
-
+	
+	@GetMapping("/allBookings")
+	public List<Bookings> allBookings(){
+		return bookingService.getAllBookings();
+	}
+	
+	
+	@GetMapping("/count")
+    public int getAllBookingsCount() {
+        return bookingService.countAllBookings();
+    }
 }

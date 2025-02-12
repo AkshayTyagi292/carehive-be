@@ -14,5 +14,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	public User findByEmail(String email);
 	public	List<User> findByUserType(UserType caretaker); 
 	public User findByResetToken(String token);
+	public int countByUserType(UserType userType);
 
 }

@@ -1,10 +1,17 @@
 package com.carehive.services;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.management.RuntimeErrorException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.carehive.entities.User;
@@ -17,73 +24,68 @@ import com.carehive.repositories.UserServicesRepository;
 import jakarta.transaction.Transactional;
 
 @Service
-public class UserServiceImpl implements UserService {
-	
+public class UserServiceImpl implements UserService, UserDetailsService {
+
 	@Autowired
 	UserRepository userRepository;
-	
+
 	@Autowired
 	UserServicesService userServicesService;
-	
+
 	@Autowired
 	UserServicesRepository userServicesRepository;
 
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
 	@Override
 	public User register(User user) {
-		if(user==null) {
-			  throw new RuntimeException("please enter valid user details");
+		if (user == null) {
+			throw new RuntimeException("please enter valid user details");
 		}
-		if(user.getDate()==null||user.getDate().isAfter(LocalDate.now())) {
-			  throw new RuntimeException("please enter a valid date");
+		if (user.getDate() == null || user.getDate().isAfter(LocalDate.now())) {
+			throw new RuntimeException("please enter a valid date");
 		}
-		  if (user.getDate().plusYears(18).isAfter(LocalDate.now())) {
-		        throw new RuntimeException("User must be at least 18 years old.");
-		    }
-		  
-		  
-		  
-		User savedUser=userRepository.save(user); 
+		if (user.getDate().plusYears(18).isAfter(LocalDate.now())) {
+			throw new RuntimeException("User must be at least 18 years old.");
+		}
 		
-		
-		
-		
-		 return userRepository.findById(savedUser.getId())
-	                .orElseThrow(() -> new RuntimeException("User not found after saving."));
-	    }
-	
-	
+
+
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+	    User savedUser = userRepository.save(user);
+
+	    return userRepository.findById(savedUser.getId())
+	            .orElseThrow(() -> new RuntimeException("User not found after saving."));
+	}
+
 
 	@Override
 	public UserUpdateRequest getDetails(int id) {
-	
-		 User user = userRepository.findById(id)
-		            .orElseThrow(() -> new RuntimeException("User does not exist"));
 
-		    // Fetch list of serviceIds from user_services table
-		    List<Integer> serviceIds = userServicesRepository.findByUserId(id)
-		            .stream()
-		            .map(UsersServices::getServiceId)
-		            .collect(Collectors.toList());
+		User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User does not exist"));
 
-		    // Construct response DTO
-		    UserUpdateRequest response = new UserUpdateRequest();
-		    response.setUserType(user.getUserType());
-		    response.setName(user.getName());
-		    response.setEmail(user.getEmail());
-		    response.setContact(user.getContact());
-		    response.setEmergencyContact(user.getEmergencyContact());
-		    response.setGender(user.getGender());
-		    response.setDate(user.getDate());
-		    response.setPassword(user.getPassword());
-		    response.setServiceIds(serviceIds); // Add service IDs
+		// Fetch list of serviceIds from user_services table
+		List<Integer> serviceIds = userServicesRepository.findByUserId(id).stream().map(UsersServices::getServiceId)
+				.collect(Collectors.toList());
 
-		    return response;
-		
-		
+		// Construct response DTO
+		UserUpdateRequest response = new UserUpdateRequest();
+		response.setUserType(user.getUserType());
+		response.setName(user.getName());
+		response.setEmail(user.getEmail());
+		response.setContact(user.getContact());
+		response.setEmergencyContact(user.getEmergencyContact());
+		response.setGender(user.getGender());
+		response.setDate(user.getDate());
+		response.setPassword(user.getPassword());
+		response.setServiceIds(serviceIds); // Add service IDs
+
+		return response;
+
 	}
 
-	
-	
 //	@Override
 //	public User updateUser(User user, int id) {
 //		// TODO Auto-generated method stub
@@ -125,45 +127,49 @@ public class UserServiceImpl implements UserService {
 //	        return userRepository.save(userToUpdate);
 //						  
 //	}	
-	
+
 	@Override
 	@Transactional
 	public User updateUser(User user, int id, List<Integer> serviceIds) {
-	    User userToUpdate = userRepository.findById(id)
-	            .orElseThrow(() -> new RuntimeException("User does not exist"));
+		User userToUpdate = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User does not exist"));
 
-	    if (user.getUserType() != null) userToUpdate.setUserType(user.getUserType());
-	    if (user.getName() != null) userToUpdate.setName(user.getName());
-	    if (user.getEmail() != null) userToUpdate.setEmail(user.getEmail());
-	    if (user.getContact() != null) userToUpdate.setContact(user.getContact());
-	    if (user.getEmergencyContact() != null) userToUpdate.setEmergencyContact(user.getEmergencyContact());
-	    if (user.getGender() != null) userToUpdate.setGender(user.getGender());
-	    if (user.getDate() != null) userToUpdate.setDate(user.getDate());
-	    if (user.getPassword() != null) userToUpdate.setPassword(user.getPassword());
+		if (user.getUserType() != null)
+			userToUpdate.setUserType(user.getUserType());
+		if (user.getName() != null)
+			userToUpdate.setName(user.getName());
+		if (user.getEmail() != null)
+			userToUpdate.setEmail(user.getEmail());
+		if (user.getContact() != null)
+			userToUpdate.setContact(user.getContact());
+		if (user.getEmergencyContact() != null)
+			userToUpdate.setEmergencyContact(user.getEmergencyContact());
+		if (user.getGender() != null)
+			userToUpdate.setGender(user.getGender());
+		if (user.getDate() != null)
+			userToUpdate.setDate(user.getDate());
+		if (user.getPassword() != null)
+			userToUpdate.setPassword(user.getPassword());
 
-	    // Save updated user details
-	    userRepository.save(userToUpdate);
+		// Save updated user details
+		userRepository.save(userToUpdate);
 
-	    // Update user services
-	    userServicesService.updateUserServices(id, serviceIds);
+		// Update user services
+		userServicesService.updateUserServices(id, serviceIds);
 
-	    return userToUpdate;
+		return userToUpdate;
 	}
-	
+
 	@Override
 	public List<User> getAllCaretakers() {
 		// TODO Auto-generated method stub
 		return userRepository.findByUserType(UserType.Caretaker);
 	}
 
-	
 	@Override
 	public User findByEmail(String email) {
 		// TODO Auto-generated method stub
 		return userRepository.findByEmail(email.trim());
 	}
-
-
 
 	@Override
 	public User findByResetToken(String token) {
@@ -171,12 +177,26 @@ public class UserServiceImpl implements UserService {
 		return userRepository.findByResetToken(token);
 	}
 
+	@Override
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+		User user = userRepository.findByEmail(email);
 
+		if (user == null) {
+			throw new UsernameNotFoundException("User not found with email: " + email);
+		}
 
-
-
-	
-	
+		return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
+				new ArrayList<>());
 	}
+	
+	
+	@Override
+    public int countByUserType(UserType userType) {
+        // Assuming you have a method in your repository to find by userType
+        return userRepository.countByUserType(userType);
+    }
+	
+	
+	
 
-
+}
