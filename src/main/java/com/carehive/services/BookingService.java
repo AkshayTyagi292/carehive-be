@@ -15,5 +15,8 @@ public interface BookingService {
 	public Bookings updateBookingStatus(int id, BookingStatus status);
 
 	public Bookings getBookingDetails(int bookingId);
-
+	
+	public List<Bookings> getAllBookings();
+	
+	public int countAllBookings();
 }

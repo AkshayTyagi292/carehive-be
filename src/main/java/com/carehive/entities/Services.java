@@ -23,6 +23,13 @@ public class Services {
 	@Column(name="servicetitle")
 	private String serviceTitle;
 	
+	@Column(name="servicedescription")
+	private String serviceDescription;
+	
+	@Column(name="hourlyprice")
+	private double hourlyPrice;
+	
+	
 	public int getServiceId() {
 		return serviceId;
 	}
@@ -30,9 +37,6 @@ public class Services {
 	public void setServiceId(int serviceId) {
 		this.serviceId = serviceId;
 	}
-
-	@Column(name="hourlyprice")
-	private double hourlyPrice;
 
 	public String getServiceTitle() {
 		return serviceTitle;
@@ -50,10 +54,19 @@ public class Services {
 		this.hourlyPrice = hourlyPrice;
 	}
 
-	public Services(String serviceTitle, double hourlyPrice) {
+	public String getServiceDescription() {
+		return serviceDescription;
+	}
+
+	public void setServiceDescription(String serviceDescription) {
+		this.serviceDescription = serviceDescription;
+	}
+
+	public Services(String serviceTitle, double hourlyPrice, String	serviceDescription) {
 		super();
 		this.serviceTitle = serviceTitle;
 		this.hourlyPrice = hourlyPrice;
+		this.serviceDescription=serviceDescription;
 	}
 	
 	

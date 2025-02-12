@@ -24,8 +24,6 @@ public class User {
 	@Column(name="id")
 	private int id;
 	
-	
-	
 	@Column(name="usertype")
 	@Enumerated(EnumType.STRING)  
 	private UserType userType;

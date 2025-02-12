@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.carehive.entities.User;
@@ -23,6 +24,9 @@ public class LoginServiceImpl implements LoginService {
 	
 	@Autowired
 	MailService mailService;
+	
+	@Autowired
+	PasswordEncoder passwordEncoder;
 	
 	@Override
 	public User login(User user) {
@@ -49,20 +53,21 @@ public class LoginServiceImpl implements LoginService {
 
 	@Override
 	public String resetPassword(String token, String newPassword) {
-		// TODO Auto-generated method stub
 		newPassword = newPassword.replaceAll("^\"|\"$", "").trim();
 		User user = userService.findByResetToken(token);
+
 		if (user == null || user.getResetTokenExpiry().isBefore(LocalDateTime.now())) {
 			throw new RuntimeException("Invalid or expired token");
-			//return "Invalid or expired token";
 		}
 
-		// Update the password
-		user.setPassword(newPassword);
-		// Clear the reset token after use
-		user.setResetToken(null); 
-		user.setResetTokenExpiry(null);
-		userService.register(user);
+		User existingUser = userRepository.findById(user.getId())
+				.orElseThrow(() -> new RuntimeException("User not found!"));
+
+		existingUser.setPassword(passwordEncoder.encode(newPassword));
+		existingUser.setResetToken(null);
+		existingUser.setResetTokenExpiry(null);
+
+		userRepository.save(existingUser);
 
 		return "Password successfully reset";
 	}

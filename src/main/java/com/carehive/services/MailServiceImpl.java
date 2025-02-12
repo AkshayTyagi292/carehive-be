@@ -15,7 +15,7 @@ public class MailServiceImpl implements MailService {
 	 @Override
 	    public void sendPasswordResetEmail(String toEmail, String token) {
 	        SimpleMailMessage message = new SimpleMailMessage();
-	        message.setFrom("chetup988@gmail.com");
+	        message.setFrom("carehiveb@gmail.com");
 	        message.setTo(toEmail);
 	        message.setSubject("Password Reset Request");
 	        message.setText("To reset your password, click the following link: \n"

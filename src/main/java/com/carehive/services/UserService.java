@@ -3,6 +3,7 @@ package com.carehive.services;
 import java.util.List;
 
 import com.carehive.entities.User;
+import com.carehive.entities.UserType;
 import com.carehive.entities.UserUpdateRequest;
 
 public interface UserService {
@@ -12,5 +13,8 @@ public interface UserService {
 		public List<User> getAllCaretakers();
 		public User findByEmail(String email);
 		public User findByResetToken(String token);
+		
+		
+		public int countByUserType(UserType userType);
 	
 }
